@@ -193,8 +193,14 @@
 
     mergeWith: function(otherPiece) {
       otherPiece.alignWith(this);
-// TODO: include other merged pieces as well
       this.addMergedPiece(otherPiece);
+
+      // align all merged pieces as well
+      for (var i=0, l=this.mergedPieces.length-1; i<l; ++i) {
+        if (this.mergedPieces[i+1]) {
+          this.mergedPieces[i].alignWith(this.mergedPieces[i+1])
+        }
+      }
     },
 
     addMergedPiece: function(otherPiece) {
@@ -227,6 +233,8 @@
         case this._neighbors.left:
           x -= width;
           break;
+        default:
+          return;
       }
       otherPiece.setPosition(new Vector(Math.round(x), Math.round(y)));
     },
@@ -239,6 +247,11 @@
           height = this.config.height,
 
           result = false;
+
+      // if we are already connected, do not say it's new match
+      if (_.find(this.mergedPieces, function(p) { return p == otherPiece; })) {
+        return false;
+      }
 
       switch(otherPiece) {
         case this._neighbors.top:

@@ -93,13 +93,14 @@
 
     _setNeighbors: function() {
       var self    = this,
+          piecesX = this.config.piecesX,
           piecesY = this.config.piecesY;
       $.each(this._pieces, function(i, piece) {
         piece.setNeighbors({
           top: self._pieces[i - piecesY],
-          right: self._pieces[i + 1],
+          right: i%piecesX === 0 ? self._pieces[i + 1] : null,
           bottom: self._pieces[i + piecesY],
-          left: self._pieces[i - 1]
+          left: i%piecesX-1 === 0 ? self._pieces[i - 1] : null
         });
       });
     },

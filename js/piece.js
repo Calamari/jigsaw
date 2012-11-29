@@ -43,10 +43,9 @@
           defs = document.getElementsByTagName('defs')[0];
       svg.pattern(defs, {
         id: "puzzleimage" + this.pieceNumber,
-        patternUnits: "userSpaceOnUse",
         href: '#puzzleimage',
-        x: this.config.positionInImage.x,
-        y: this.config.positionInImage.y
+        x: -this.config.positionInImage.x,
+        y: -this.config.positionInImage.y
       });
     },
 

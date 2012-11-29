@@ -148,7 +148,15 @@
           $(document).off('.JigsawPiece');
           self.fire('dragStop');
         });
+      self._putToFront();
       self.fire('dragStart');
+    },
+
+    _putToFront: function() {
+      var svgElement = this.config.svg.element;
+      _.each(this.mergedPieces, function(p) {
+        svgElement.appendChild(p.element);
+      });
     },
 
     _move: function(offset) {
@@ -276,10 +284,6 @@
 
     setNeighbors: function(pieces) {
       this._neighbors = pieces;
-    },
-
-    setZIndex: function(zIndex) {
-      this._$element.css('z-index', zIndex);
     }
   });
   Piece.INSIDE  = INSIDE;

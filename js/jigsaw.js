@@ -108,9 +108,6 @@
     _observePieces: function() {
       var self = this;
       $.each(this._pieces, function(i, piece) {
-        piece.on('dragStart', function() {
-          this.setZIndex(++actualZIndex);
-        });
         piece.on('dragStop', function() {
           var draggedPiece = this;
           $.each(self._checkCollision(this), function(i, fittingPiece) {

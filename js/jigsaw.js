@@ -1,4 +1,4 @@
-/*global Base:true, window:true, JigsawPiece:true, Vector:true */
+/*global Base:true, window:true, JigsawPiece:true, Vector:true, JazSvg:true */
 
 ;(function($) {
   "use strict";
@@ -35,17 +35,59 @@
       this._image = image;
     },
 
+    _createSVG: function() {
+      var config      = this.config,
+          svg = new JazSvg({
+            height: window.innerHeight,
+            width: window.innerWidth
+          }),
+          defs = svg.defs();
+      $(svg.element)
+        .css({
+          position: 'absolute',
+          left: 0,
+          top: 0
+        })
+        .appendTo('body');
+      svg.pattern(defs, {
+        id: "puzzleimage",
+        patternUnits: "userSpaceOnUse", //objectBoundingBox
+        width: config.puzzleWidth,
+        height: config.puzzleHeight,
+        x: 0,
+        y: 0
+      }, svg.image({
+        x: 0,
+        y: 0,
+        width: config.puzzleWidth,
+        height: config.puzzleHeight,
+        'href': this._image.src
+      }));
+      this.svg = svg;
+      this.defs = defs;
+    },
+
     _createPieces: function() {
       var pieceNumber = 0,
           config      = this.config,
           pieceWidth  = config.puzzleWidth  / config.piecesX,
           pieceHeight = config.puzzleHeight / config.piecesY;
+
       for (var y=0,ly=this.config.piecesY; y<ly; ++y) {
         for (var x=0,lx=this.config.piecesX; x<lx; ++x) {
+      this.svg.pattern(this.defs, {
+        id: "puzzleimage" + pieceNumber,
+        patternUnits: "userSpaceOnUse",
+        href: '#puzzleimage',
+        x: (pieceWidth * x),
+        y: (pieceHeight * y)
+      });
+
           this._pieces.push(new JigsawPiece(pieceNumber++, {
             image: this._image,
             width: pieceWidth,
             height: pieceHeight,
+            svg: this.svg,
             positionInImage: new Vector(pieceWidth * x, pieceHeight * y),
 
             right: x===lx-1 ? JigsawPiece.PLAIN : JigsawPiece.OUTSIDE,
@@ -94,6 +136,16 @@
       });
     },
 
+    _shufflePieces: function() {
+      var config      = this.config,
+          pieceWidth  = config.puzzleWidth  / config.piecesX,
+          pieceHeight = config.puzzleHeight / config.piecesY;
+
+      $.each(this._pieces, function(i, piece) {
+        piece.setPosition(new Vector(Math.random() * (window.innerWidth - pieceWidth), Math.random() * (window.innerHeight - pieceHeight)));
+      });
+    },
+
     _addPiecesToDom: function() {
       var body = $('body');
       $.each(this._pieces, function(i, piece) {
@@ -102,10 +154,6 @@
         // add info about all other pieces
         piece.otherPieces(this._pieces);
       });
-      // TEST:
-
-//      console.log(this._pieces);
-
     },
 
     // do everything that has to be done after image was loaded
@@ -117,8 +165,10 @@
       if (this.config.puzzleHeight === LIKE_IMAGE) {
         this.config.puzzleHeight = this._image.height;
       }
+      this._createSVG();
       this._createPieces();
-      this._addPiecesToDom();
+      //this._addPiecesToDom();
+      this._shufflePieces();
       this._observePieces();
     }
   });

@@ -26,15 +26,93 @@
         // [mandatory] position of piece within image
         positionInImage: null,
         // how big can the noses be? (in px)
-        noseSize: 20
+        noseSize: 20,
+        paper: null
       }, config);
-      this._offset = this.config.noseSize;
+      this._offset = 0;//this.config.noseSize;
       this._eventHandlers = {};
       this.mergedPieces = [this];
 
-      this._createCanvas();
-      this._cutPiece();
+      // this._createCanvas();
+      // this._cutPiece();
+      this._createSVG();
+      this.setPosition(new Vector());
       this._makeDraggable();
+    },
+
+    _createSVG: function() {
+      var svg = this.config.svg,
+          width = this.config.width,
+          height = this.config.height,
+          offset = this._offset,
+          config = this.config,
+          path = ['M ' + offset + ',' + offset],
+          piece;
+
+      // TOP NOSE
+      path.push('l ' + (width*6/15) + ', 0');
+      if (config['top'] === OUTSIDE) {
+        path.push('c ' + (width*0/15) + ',' + (-height*1/15) + ' ' + (-width*1/15) + ',' + (-height*1/15) + ' ' + (-width*1/15) + ',' + (-height*2/15));
+        path.push('c 0,' + (-height*2/15) + ' ' + (width*5/15) + ',' + (-height*2/15) + ' ' + (width*5/15) + ',0');
+        path.push('c ' + (width*0/15) + ',' + (height*1/15) + ' ' + (-width*1/15) + ',' + (height*1/15) + ' ' + (-width*1/15) + ',' + (height*2/15));
+      } else if (config['top'] === INSIDE) {
+        path.push('c ' + (width*0/15) + ',' + (height*1/15) + ' ' + (-width*1/15) + ',' + (height*1/15) + ' ' + (-width*1/15) + ',' + (height*2/15));
+        path.push('c 0,' + (height*2/15) + ' ' + (width*5/15) + ',' + (height*2/15) + ' ' + (width*5/15) + ',0');
+        path.push('c ' + (width*0/15) + ',' + (-height*1/15) + ' ' + (-width*1/15) + ',' + (-height*1/15) + ' ' + (-width*1/15) + ',' + (-height*2/15));
+      }
+
+      path.push('L ' + (offset + width) + ', ' + offset);
+      // RIGHT NOSE
+      path.push('l ' + (0) + ', ' + (height*6/15));
+      if (config['right'] === OUTSIDE) {
+        path.push('c ' + (width*1/15) + ',' + (height*0/15) + ' ' + (width*1/15) + ',' + (-height*1/15) + ' ' + (width*2/15) + ',' + (-height*1/15));
+        path.push('c ' + (width*2/15) + ',0 ' + (width*2/15) + ',' + (height/3) + ' 0,' + (height/3));
+        path.push('c ' + (-width*1/15) + ',' + (height*0/15) + ' ' + (-width*1/15) + ',' + (-height*1/15) + ' ' + (-width*2/15) + ',' + (-height*1/15));
+      } else if (config['right'] === INSIDE) {
+        path.push('c ' + (-width*1/15) + ',' + (height*0/15) + ' ' + (-width*1/15) + ',' + (-height*1/15) + ' ' + (-width*2/15) + ',' + (-height*1/15));
+        path.push('c ' + (-width*2/15) + ',0 ' + (-width*2/15) + ',' + (height/3) + ' 0,' + (height/3));
+        path.push('c ' + (width*1/15) + ',' + (height*0/15) + ' ' + (width*1/15) + ',' + (-height*1/15) + ' ' + (width*2/15) + ',' + (-height*1/15));
+      }
+
+      path.push('L ' + (offset + width) + ', ' + (offset + height));
+      // BOTTOM NOSE
+      path.push('l ' + (-width*6/15) + ', 0');
+      if (config['bottom'] === OUTSIDE) {
+        path.push('c ' + (-width*0/15) + ',' + (height*1/15) + ' ' + (width*1/15) + ',' + (height*1/15) + ' ' + (width*1/15) + ',' + (height*2/15));
+        path.push('c 0,' + (height*2/15) + ' ' + (-width*5/15) + ',' + (height*2/15) + ' ' + (-width*5/15) + ',0');
+        path.push('c ' + (-width*0/15) + ',' + (-height*1/15) + ' ' + (width*1/15) + ',' + (-height*1/15) + ' ' + (width*1/15) + ',' + (-height*2/15));
+      } else if (config['bottom'] === INSIDE) {
+        path.push('c ' + (-width*0/15) + ',' + (-height*1/15) + ' ' + (width*1/15) + ',' + (-height*1/15) + ' ' + (width*1/15) + ',' + (-height*2/15));
+        path.push('c 0,' + (-height*2/15) + ' ' + (-width*5/15) + ',' + (-height*2/15) + ' ' + (-width*5/15) + ',0');
+        path.push('c ' + (-width*0/15) + ',' + (height*1/15) + ' ' + (width*1/15) + ',' + (height*1/15) + ' ' + (width*1/15) + ',' + (height*2/15));
+      }
+
+      path.push('L ' + offset + ', ' + (offset + height));
+      // LEFT NOSE
+      path.push('l ' + (0) + ', ' + (-height*6/15));
+      if (config['left'] === OUTSIDE) {
+        path.push('c ' + (-width*1/15) + ',' + (-height*0/15) + ' ' + (-width*1/15) + ',' + (height*1/15) + ' ' + (-width*2/15) + ',' + (height*1/15));
+        path.push('c ' + (-width*2/15) + ',0 ' + (-width*2/15) + ',' + (-height/3) + ' 0,' + (-height/3));
+        path.push('c ' + (width*1/15) + ',' + (-height*0/15) + ' ' + (width*1/15) + ',' + (height*1/15) + ' ' + (width*2/15) + ',' + (height*1/15));
+      } else if (config['left'] === INSIDE) {
+        path.push('c ' + (width*1/15) + ',' + (-height*0/15) + ' ' + (width*1/15) + ',' + (height*1/15) + ' ' + (width*2/15) + ',' + (height*1/15));
+        path.push('c ' + (width*2/15) + ',0 ' + (width*2/15) + ',' + (-height/3) + ' 0,' + (-height/3));
+        path.push('c ' + (-width*1/15) + ',' + (-height*0/15) + ' ' + (-width*1/15) + ',' + (height*1/15) + ' ' + (-width*2/15) + ',' + (height*1/15));
+      }
+
+      path.push('z'); // close path
+      piece = svg.path({
+        width: width + 2 * offset,
+        height: height + 2 * offset,
+        d: path.join(' '),
+        fill: 'url(#puzzleimage' + this.pieceNumber + ')',
+        strokeWidth: 1,
+        stroke: 'rgba(0,0,0,0.4)',
+        x: config.positionInImage.x,
+        y: config.positionInImage.y
+      });
+      this.element = piece;
+      this._$element = $(piece);
     },
 
     _createCanvas: function() {
@@ -87,7 +165,22 @@
             p.x - o, p.y + h/2 - o/2, o, o,
             0, o + h/2 - o/2, o, o);
         } else if (isInside) {
-          this._ctx.clearRect(o, o + h/2 - o/2, o, o);
+          //this._ctx.clearRect(o, o + h/2 - o/2, o, o);
+          console.log(this._ctx);
+          //var imageData = this._ctx.getImageData(o, o + h/2 - o/2, o, o);
+          var imageData = this._ctx.createImageData(o, o);
+          for (var y = 0; y < o + h/2 - o/2; ++y) {
+            for (var x = 0; x < o; ++x) {
+              var index = (y * o + x) * 4;
+              // alpha channel
+              imageData[index] = 200;
+              imageData[index+1] = 100;
+              imageData[index+2] = 0;
+              imageData[index+3] = 220;
+            }
+          }
+          console.log(imageData);
+          this._ctx.putImageData(imageData, 0, 0 + h/2 - o/2, o, o)
         }
       } else if (dir === 'top') {
         if (isOutside) {
@@ -116,7 +209,9 @@
       //   stop: function() { self._onDragStop(); }
       // });
       this._$element.on('mousedown', function(event) {
-        self._startMoving(event);
+        if (event.which === 1) {
+          self._startMoving(event);
+        }
       });
     },
 
@@ -140,21 +235,20 @@
 
     // TODO: Webkit could help here with translations
     _move: function(offset) {
-      this._$element.css({
-        marginLeft: offset.x,
-        marginTop: offset.y
-      });
       _.each(this.mergedPieces, function(p) {
-        p._$element.css({
-          marginLeft: offset.x,
-          marginTop: offset.y
-        });
+        p.element.setAttribute('transform', 'translate('+(offset.x + p.position.x)+', '+(offset.y + p.position.y)+')');
       });
     },
 
     calcPositionFromTranslation: function() {
       var position = this.position,
-          element  = this._$element;
+          element  = this._$element,
+          transform = this.element.getAttribute('transform'),
+          translateX = parseInt(transform.split('(')[1], 10),
+          translateY = parseInt(transform.split(',')[1], 10);
+      position.x = translateX;
+      position.y = translateY;
+      return;
       position.x += parseInt(element.css('margin-left'), 10);
       position.y += parseInt(element.css('margin-top'), 10);
       element.css({
@@ -189,11 +283,7 @@
 
     setPosition: function(position) {
       this.position = position;
-      this._$element.css({
-        position: 'absolute',
-        left: position.x - this._offset,
-        top: position.y - this._offset
-      });
+      this.element.setAttribute('transform', 'translate(' + position.x + ', ' + position.y + ')');
     },
 
     on: function(type, callback) {
@@ -214,7 +304,7 @@
 
     mergeWith: function(otherPiece) {
       otherPiece.alignWith(this);
-
+// TODO: include other merged pieces as well
       this.addMergedPiece(otherPiece);
     },
 

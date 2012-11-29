@@ -14,8 +14,6 @@
         height: AUTOMATIC,
         puzzleWidth: LIKE_IMAGE,
         puzzleHeight: LIKE_IMAGE,
-        // canvas: null,
-        // canvasId: "jigsaw-canvas",
         piecesX: 10,
         piecesY: 10,
         mergeTolerance: 20
@@ -75,14 +73,6 @@
 
       for (var y=0,ly=this.config.piecesY; y<ly; ++y) {
         for (var x=0,lx=this.config.piecesX; x<lx; ++x) {
-      this.svg.pattern(this.defs, {
-        id: "puzzleimage" + pieceNumber,
-        patternUnits: "userSpaceOnUse",
-        href: '#puzzleimage',
-        x: (pieceWidth * x),
-        y: (pieceHeight * y)
-      });
-
           this._pieces.push(new JigsawPiece(pieceNumber++, {
             image: this._image,
             width: pieceWidth,
@@ -146,16 +136,6 @@
       });
     },
 
-    _addPiecesToDom: function() {
-      var body = $('body');
-      $.each(this._pieces, function(i, piece) {
-        body.append(piece.element);
-        piece.setPosition(new Vector(200 - 50*i, 50*i));
-        // add info about all other pieces
-        piece.otherPieces(this._pieces);
-      });
-    },
-
     // do everything that has to be done after image was loaded
     _onImageLoaded: function() {
       this._imageLoaded = true;
@@ -167,7 +147,6 @@
       }
       this._createSVG();
       this._createPieces();
-      //this._addPiecesToDom();
       this._shufflePieces();
       this._observePieces();
     }

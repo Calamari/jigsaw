@@ -29,24 +29,33 @@
         noseSize: 20,
         paper: null
       }, config);
-      this._offset = 0;//this.config.noseSize;
       this._eventHandlers = {};
       this.mergedPieces = [this];
 
-      // this._createCanvas();
-      // this._cutPiece();
-      this._createSVG();
+      this._createPattern();
+      this._createSVGPiece();
       this.setPosition(new Vector());
       this._makeDraggable();
     },
 
-    _createSVG: function() {
+    _createPattern: function() {
+      var svg = this.config.svg,
+          defs = document.getElementsByTagName('defs')[0];
+      svg.pattern(defs, {
+        id: "puzzleimage" + this.pieceNumber,
+        patternUnits: "userSpaceOnUse",
+        href: '#puzzleimage',
+        x: this.config.positionInImage.x,
+        y: this.config.positionInImage.y
+      });
+    },
+
+    _createSVGPiece: function() {
       var svg = this.config.svg,
           width = this.config.width,
           height = this.config.height,
-          offset = this._offset,
           config = this.config,
-          path = ['M ' + offset + ',' + offset],
+          path = ['M 0,0'],
           piece;
 
       // TOP NOSE
@@ -61,7 +70,7 @@
         path.push('c ' + (width*0/15) + ',' + (-height*1/15) + ' ' + (-width*1/15) + ',' + (-height*1/15) + ' ' + (-width*1/15) + ',' + (-height*2/15));
       }
 
-      path.push('L ' + (offset + width) + ', ' + offset);
+      path.push('L ' + width + ', 0');
       // RIGHT NOSE
       path.push('l ' + (0) + ', ' + (height*6/15));
       if (config['right'] === OUTSIDE) {
@@ -74,7 +83,7 @@
         path.push('c ' + (width*1/15) + ',' + (height*0/15) + ' ' + (width*1/15) + ',' + (-height*1/15) + ' ' + (width*2/15) + ',' + (-height*1/15));
       }
 
-      path.push('L ' + (offset + width) + ', ' + (offset + height));
+      path.push('L ' + width + ', ' + height);
       // BOTTOM NOSE
       path.push('l ' + (-width*6/15) + ', 0');
       if (config['bottom'] === OUTSIDE) {
@@ -87,7 +96,7 @@
         path.push('c ' + (-width*0/15) + ',' + (height*1/15) + ' ' + (width*1/15) + ',' + (height*1/15) + ' ' + (width*1/15) + ',' + (height*2/15));
       }
 
-      path.push('L ' + offset + ', ' + (offset + height));
+      path.push('L 0, ' + height);
       // LEFT NOSE
       path.push('l ' + (0) + ', ' + (-height*6/15));
       if (config['left'] === OUTSIDE) {
@@ -102,8 +111,8 @@
 
       path.push('z'); // close path
       piece = svg.path({
-        width: width + 2 * offset,
-        height: height + 2 * offset,
+        width: width,
+        height: height,
         d: path.join(' '),
         fill: 'url(#puzzleimage' + this.pieceNumber + ')',
         strokeWidth: 1,
@@ -115,99 +124,8 @@
       this._$element = $(piece);
     },
 
-    _createCanvas: function() {
-      this.element = document.createElement('canvas');
-      this.element.width = this.config.width + 2 * this._offset;
-      this.element.height = this.config.height + 2 * this._offset;
-      this._ctx = this.element.getContext('2d');
-      this._$element = $(this.element).addClass('puzzle-piece');
-    },
-
-    _cutPiece: function() {
-      var config = this.config,
-          p = config.positionInImage,
-          w = config.width,
-          h = config.height,
-
-          self = this;
-      this._ctx.drawImage(this.config.image, p.x, p.y, w, h, this._offset, this._offset, w, h);
-      _.each(['top', 'left', 'right', 'bottom'], function(dir) {
-        self._createNose(dir);
-      });
-      //TEST:
-      // this._ctx.fillStyle = 'rgba(0,0,0,0.3)';
-      // //this._ctx.moveTo(40, 40);
-      // this._ctx.rect(40, 40, 100 ,100);
-      // this._ctx.fill();
-    },
-
-    // For now it makes strange boxes as noses :)
-    _createNose: function(dir) {
-      var config = this.config,
-          p = config.positionInImage,
-          w = config.width,
-          h = config.height,
-          o = this._offset,
-          isOutside = config[dir] === OUTSIDE,
-          isInside  = config[dir] === INSIDE;
-
-      if (dir === 'right') {
-        if (isOutside) {
-          this._ctx.drawImage(this.config.image,
-            p.x + w, p.y + h/2 - o/2, o, o,
-            o + w, o + h/2 - o/2, o, o);
-        } else if (isInside) {
-          this._ctx.clearRect(w, o + h/2 - o/2, o, o);
-        }
-      } else if (dir === 'left') {
-        if (isOutside) {
-          this._ctx.drawImage(this.config.image,
-            p.x - o, p.y + h/2 - o/2, o, o,
-            0, o + h/2 - o/2, o, o);
-        } else if (isInside) {
-          //this._ctx.clearRect(o, o + h/2 - o/2, o, o);
-          console.log(this._ctx);
-          //var imageData = this._ctx.getImageData(o, o + h/2 - o/2, o, o);
-          var imageData = this._ctx.createImageData(o, o);
-          for (var y = 0; y < o + h/2 - o/2; ++y) {
-            for (var x = 0; x < o; ++x) {
-              var index = (y * o + x) * 4;
-              // alpha channel
-              imageData[index] = 200;
-              imageData[index+1] = 100;
-              imageData[index+2] = 0;
-              imageData[index+3] = 220;
-            }
-          }
-          console.log(imageData);
-          this._ctx.putImageData(imageData, 0, 0 + h/2 - o/2, o, o)
-        }
-      } else if (dir === 'top') {
-        if (isOutside) {
-          this._ctx.drawImage(this.config.image,
-            p.x + w/2 - o/2, p.y, o, o,
-            o + w/2 - o/2, 0, o, o);
-        } else if (isInside) {
-          this._ctx.clearRect(o + w/2 - o/2, o, o, o);
-        }
-      } else if (dir === 'bottom') {
-        if (isOutside) {
-          this._ctx.drawImage(this.config.image,
-            p.x + w/2 - o/2, p.y + h, o, o,
-            o + w/2 - o/2, o+h, o, o);
-        } else if (isInside) {
-          this._ctx.clearRect(o + w/2 - o/2, h, o, o);
-        }
-      }
-    },
-
     _makeDraggable: function() {
       var self = this;
-      // $(this.element).draggable({
-      //   start: function() { self._onDragStart(); },
-      //   drag: function() { self._onDragMove(); },
-      //   stop: function() { self._onDragStop(); }
-      // });
       this._$element.on('mousedown', function(event) {
         if (event.which === 1) {
           self._startMoving(event);
@@ -233,7 +151,6 @@
       self.fire('dragStart');
     },
 
-    // TODO: Webkit could help here with translations
     _move: function(offset) {
       _.each(this.mergedPieces, function(p) {
         p.element.setAttribute('transform', 'translate('+(offset.x + p.position.x)+', '+(offset.y + p.position.y)+')');
@@ -243,38 +160,10 @@
     calcPositionFromTranslation: function() {
       var position = this.position,
           element  = this._$element,
-          transform = this.element.getAttribute('transform'),
-          translateX = parseInt(transform.split('(')[1], 10),
-          translateY = parseInt(transform.split(',')[1], 10);
-      position.x = translateX;
-      position.y = translateY;
-      return;
-      position.x += parseInt(element.css('margin-left'), 10);
-      position.y += parseInt(element.css('margin-top'), 10);
-      element.css({
-        left: position.x - this._offset,
-        top: position.y - this._offset,
-        marginLeft: 0,
-        marginTop: 0
-      });
-    },
+          transform = this.element.getAttribute('transform');
 
-    _onDragStart: function() {
-      this.fire('dragStart');
-    },
-
-    _onDragMove: function() {
-      var p         = this._$element.position(),
-          thisPiece = this;
-      this.position.x = p.left + this._offset;
-      this.position.y = p.top + this._offset;
-    },
-
-    _onDragStop: function() {
-      var p = this._$element.position();
-      this.position.x = p.left + this._offset;
-      this.position.y = p.top + this._offset;
-      this.fire('dragStop');
+      position.x = parseInt(transform.split('(')[1], 10);
+      position.y = parseInt(transform.split(',')[1], 10);
     },
 
     otherPieces: function(pieces) {

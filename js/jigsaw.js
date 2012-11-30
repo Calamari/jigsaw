@@ -18,7 +18,8 @@
         piecesY: 10,
         mergeTolerance: 20,
         pieceBorderColor: 'rgba(0,0,0,0.4)',
-        dropShadow: false
+        dropShadow: false,
+        fitImageTo: window
       }, config);
       this._pieces = [];
 
@@ -85,6 +86,7 @@
             svg: this.svg,
             positionInImage: new Vector(pieceWidth * x, pieceHeight * y),
             pieceBorderColor: config.pieceBorderColor,
+            scale: this.scale || 1,
 
             right: x===lx-1 ? JigsawPiece.PLAIN : JigsawPiece.OUTSIDE,
             left: x===0 ? JigsawPiece.PLAIN : JigsawPiece.INSIDE,
@@ -152,10 +154,19 @@
       if (this.config.puzzleHeight === LIKE_IMAGE) {
         this.config.puzzleHeight = this._image.height;
       }
+      this._calculateScaling();
       this._createSVG();
       this._createPieces();
       this._shufflePieces();
       this._observePieces();
+    },
+
+    _calculateScaling: function() {
+      var fitTo = this.config.fitImageTo;
+      if (fitTo) {
+        this.scale = Math.min($(fitTo).width() / this.config.puzzleWidth, 1);
+        this.scale = Math.min($(fitTo).height() / this.config.puzzleHeight, this.scale);
+      }
     },
 
     _createShadow: function() {

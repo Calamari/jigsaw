@@ -27,15 +27,24 @@
         positionInImage: null,
         // how big can the noses be? (in px)
         noseSize: 20,
-        paper: null
+        paper: null,
+        scale: 1
       }, config);
       this._eventHandlers = {};
       this.mergedPieces = [this];
 
+      this._scaleImage();
       this._createPattern();
       this._createSVGPiece();
       this.setPosition(new Vector());
       this._makeDraggable();
+    },
+
+    _scaleImage: function() {
+      if (this.config.scale) {
+        this.config.width *= this.config.scale;
+        this.config.height *= this.config.scale;
+      }
     },
 
     _createPattern: function() {
@@ -45,7 +54,8 @@
         id: "puzzleimage" + this.pieceNumber,
         href: '#puzzleimage',
         x: -this.config.positionInImage.x,
-        y: -this.config.positionInImage.y
+        y: -this.config.positionInImage.y,
+        patternTransform: "scale(" + this.config.scale + ")"
       });
     },
 

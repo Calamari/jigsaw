@@ -16,7 +16,9 @@
         puzzleHeight: LIKE_IMAGE,
         piecesX: 10,
         piecesY: 10,
-        mergeTolerance: 20
+        mergeTolerance: 20,
+        pieceBorderColor: 'rgba(0,0,0,0.4)',
+        dropShadow: false
       }, config);
       this._pieces = [];
 
@@ -63,6 +65,9 @@
       }));
       this.svg = svg;
       this.defs = defs;
+      if (config.dropShadow) {
+        this._createShadow();
+      }
     },
 
     _createPieces: function() {
@@ -79,6 +84,7 @@
             height: pieceHeight,
             svg: this.svg,
             positionInImage: new Vector(pieceWidth * x, pieceHeight * y),
+            pieceBorderColor: config.pieceBorderColor,
 
             right: x===lx-1 ? JigsawPiece.PLAIN : JigsawPiece.OUTSIDE,
             left: x===0 ? JigsawPiece.PLAIN : JigsawPiece.INSIDE,
@@ -150,6 +156,33 @@
       this._createPieces();
       this._shufflePieces();
       this._observePieces();
+    },
+
+    _createShadow: function() {
+      var svg = this.svg,
+          filter = svg.createElement('filter', {
+            id: 'dropShadow',
+            x: 0, y: 0,
+            width: '200%',
+            height: '200%'
+          });
+      filter.appendChild(svg.createElement('feOffset', {
+        'result': 'offOut',
+        'in': 'SourceAlpha',
+        'dx': 10,
+        'dy': 10
+      }));
+      filter.appendChild(svg.createElement('feGaussianBlur', {
+        'result': 'blurOut',
+        'in': 'offOut',
+        'stdDeviation': 10
+      }));
+      filter.appendChild(svg.createElement('feBlend', {
+        'in': 'SourceGraphic',
+        'in2': 'blurOut',
+        'mode': 'normal'
+      }));
+      this.defs.appendChild(filter);
     }
   });
   window.Jigsaw = Jigsaw;

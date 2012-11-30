@@ -45,7 +45,8 @@
         var element = createElement('path', attributes);
         this.element.appendChild(element);
         return element;
-      }
+      },
+      createElement: createElement
     });
 
 

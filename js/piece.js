@@ -115,7 +115,7 @@
         d: path.join(' '),
         fill: 'url(#puzzleimage' + this.pieceNumber + ')',
         strokeWidth: 1,
-        stroke: 'rgba(0,0,0,0.4)',
+        stroke: config.pieceBorderColor || 'rgba(0,0,0,0.4)',
         x: config.positionInImage.x,
         y: config.positionInImage.y
       });
@@ -145,10 +145,22 @@
             p.calcPositionFromTranslation();
           });
           $(document).off('.JigsawPiece');
+          self._dropShadow(false);
           self.fire('dragStop');
         });
       self._putToFront();
+      this._dropShadow(true);
       self.fire('dragStart');
+    },
+
+    _dropShadow: function(val) {
+      _.each(this.mergedPieces, function(p) {
+        if (val) {
+          p.element.setAttribute('filter', 'url(#dropShadow)');
+        } else {
+          p.element.removeAttribute('filter');
+        }
+      });
     },
 
     _putToFront: function() {

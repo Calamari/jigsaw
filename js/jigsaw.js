@@ -138,10 +138,11 @@
     _shufflePieces: function() {
       var config      = this.config,
           pieceWidth  = config.puzzleWidth  / config.piecesX,
-          pieceHeight = config.puzzleHeight / config.piecesY;
+          pieceHeight = config.puzzleHeight / config.piecesY,
+          fitTo       = config.fitImageTo;
 
       $.each(this._pieces, function(i, piece) {
-        piece.setPosition(new Vector(Math.random() * (window.innerWidth - pieceWidth), Math.random() * (window.innerHeight - pieceHeight)));
+        piece.setPosition(new Vector(Math.random() * ($(fitTo).width() - pieceWidth), Math.random() * ($(fitTo).height() - pieceHeight)));
       });
     },
 

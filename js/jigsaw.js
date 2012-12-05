@@ -121,17 +121,19 @@
       $.each(this._pieces, function(i, piece) {
         piece.on('dragStop', function() {
           var draggedPiece = this;
-          $.each(self._checkCollision(this), function(i, fittingPiece) {
+          $.each(self._checkCollision(this.mergedPieces), function(i, fittingPiece) {
             draggedPiece.mergeWith(fittingPiece);
           });
         });
       });
     },
 
-    _checkCollision: function(piece) {
+    _checkCollision: function(pieces) {
       var self        = this;
-      return $.grep(this._pieces, function(otherPiece) {
-        return piece.isMatchingWith(otherPiece, self.config.mergeTolerance);
+      return $.map(pieces, function(piece) {
+        return $.grep(self._pieces, function(otherPiece) {
+          return piece.isMatchingWith(otherPiece, self.config.mergeTolerance);
+        });
       });
     },
 

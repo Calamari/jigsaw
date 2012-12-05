@@ -105,7 +105,7 @@
           piecesY = this.config.piecesY,
           x       = 0;
 
-      $.each(this._pieces, function(i, piece) {
+      this._pieces.forEach(function(piece, i) {
         piece.setNeighbors({
           top: self._pieces[i - piecesX],
           right: x < piecesX-1 ? self._pieces[i + 1] : null,
@@ -118,10 +118,10 @@
 
     _observePieces: function() {
       var self = this;
-      $.each(this._pieces, function(i, piece) {
+      this._pieces.forEach(function(piece, i) {
         piece.on('dragStop', function() {
           var draggedPiece = this;
-          $.each(self._checkCollision(this.mergedPieces), function(i, fittingPiece) {
+          self._checkCollision(this.mergedPieces).forEach(function(fittingPiece, i) {
             draggedPiece.mergeWith(fittingPiece);
           });
         });
@@ -130,7 +130,7 @@
 
     _checkCollision: function(pieces) {
       var self        = this;
-      return $.map(pieces, function(piece) {
+      return pieces.map(function(piece) {
         return $.grep(self._pieces, function(otherPiece) {
           return piece.isMatchingWith(otherPiece, self.config.mergeTolerance);
         });
@@ -143,7 +143,7 @@
           pieceHeight = config.puzzleHeight / config.piecesY,
           fitTo       = config.fitImageTo;
 
-      $.each(this._pieces, function(i, piece) {
+      this._pieces.forEach(function(piece, i) {
         piece.setPosition(new Vector(Math.random() * ($(fitTo).width() - pieceWidth), Math.random() * ($(fitTo).height() - pieceHeight)));
       });
     },

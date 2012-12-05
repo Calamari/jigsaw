@@ -151,7 +151,7 @@
         })
         .on('mouseup.JigsawPiece', function(event) {
           self._move(new Vector(event.pageX, event.pageY).sub(startPosition));
-          _.each(self.mergedPieces, function(p) {
+          self.mergedPieces.forEach(function(p) {
             p.calcPositionFromTranslation();
           });
           $(document).off('.JigsawPiece');
@@ -164,7 +164,7 @@
     },
 
     _dropShadow: function(val) {
-      _.each(this.mergedPieces, function(p) {
+      this.mergedPieces.forEach(function(p) {
         if (val) {
           p.element.setAttribute('filter', 'url(#dropShadow)');
         } else {
@@ -175,13 +175,13 @@
 
     _putToFront: function() {
       var svgElement = this.config.svg.element;
-      _.each(this.mergedPieces, function(p) {
+      this.mergedPieces.forEach(function(p) {
         svgElement.appendChild(p.element);
       });
     },
 
     _move: function(offset) {
-      _.each(this.mergedPieces, function(p) {
+      this.mergedPieces.forEach(function(p) {
         p.element.setAttribute('transform', 'translate('+(offset.x + p.position.x)+', '+(offset.y + p.position.y)+')');
       });
     },
@@ -214,7 +214,7 @@
     fire: function(type, data) {
       var self = this;
       if (this._eventHandlers[type]) {
-        _.each(this._eventHandlers[type], function(callback) {
+        this._eventHandlers[type].forEach(function(callback) {
           callback.call(self, data);
         });
       }
@@ -236,7 +236,7 @@
       var self = this;
       if (_.indexOf(this.mergedPieces, otherPiece) === -1) {
         this.mergedPieces = _.uniq($.merge(this.mergedPieces, otherPiece.mergedPieces));
-        _.each(this.mergedPieces, function(p) {
+        this.mergedPieces.forEach(function(p) {
           p.addMergedPiece(self);
         });
       }

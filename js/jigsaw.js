@@ -1,4 +1,4 @@
-/*global Base:true, window:true, JigsawPiece:true, Vector:true, JazSvg:true */
+/*global Base, window, JigsawPiece, Vector, JazSvg */
 
 ;(function($) {
   "use strict";

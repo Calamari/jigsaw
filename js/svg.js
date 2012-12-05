@@ -1,4 +1,4 @@
-/*global Base:true, window: true, document:true, _:true */
+/*global Base, window, document, _ */
 
 ;(function() {
   "use strict";

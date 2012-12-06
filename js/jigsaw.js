@@ -88,10 +88,10 @@
             pieceBorderColor: config.pieceBorderColor,
             scale: this.scale || 1,
 
-            right: x===lx-1 ? JigsawPiece.PLAIN : JigsawPiece.OUTSIDE,
-            left: x===0 ? JigsawPiece.PLAIN : JigsawPiece.INSIDE,
-            bottom: y===ly-1 ? JigsawPiece.PLAIN : JigsawPiece.OUTSIDE,
-            top: y===0 ? JigsawPiece.PLAIN : JigsawPiece.INSIDE
+            right: x===lx-1 ? JigsawPiece.PLAIN : (Math.random() < 0.5 ? JigsawPiece.INSIDE : JigsawPiece.OUTSIDE),
+            left: x===0 ? JigsawPiece.PLAIN : (this._pieces[pieceNumber-1-1].config.right === JigsawPiece.OUTSIDE ? JigsawPiece.INSIDE : JigsawPiece.OUTSIDE),
+            bottom: y===ly-1 ? JigsawPiece.PLAIN : (Math.random() < 0.5 ? JigsawPiece.INSIDE : JigsawPiece.OUTSIDE),
+            top: y===0 ? JigsawPiece.PLAIN : (this._pieces[pieceNumber-lx-1].config.bottom === JigsawPiece.OUTSIDE ? JigsawPiece.INSIDE : JigsawPiece.OUTSIDE)
           }));
         }
       }

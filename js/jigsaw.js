@@ -35,6 +35,9 @@
       image.onload = function() {
         self._onImageLoaded();
       };
+      image.onerror = function() {
+        self._onImageError();
+      };
       this._image = image;
     },
 
@@ -155,6 +158,12 @@
       this._pieces.forEach(function(piece, i) {
         piece.setPosition(new Vector(Math.random() * ($(fitTo).width() - pieceWidth), Math.random() * ($(fitTo).height() - pieceHeight)));
       });
+    },
+
+    _onImageError: function() {
+      if (this.config.onImageError) {
+        this.config.onImageError.call(this, "Image could not be loaded");
+      }
     },
 
     // do everything that has to be done after image was loaded

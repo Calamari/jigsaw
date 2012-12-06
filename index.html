@@ -30,6 +30,9 @@
       onImageLoaded: function() {
         console.log("image", arguments);
       },
+      onImageError: function() {
+        console.log("image 404", arguments);
+      },
       onComplete: function() {
         console.log("completed", arguments);
       }

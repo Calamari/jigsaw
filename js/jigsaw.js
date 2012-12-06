@@ -120,20 +120,19 @@
       var self = this;
       this._pieces.forEach(function(piece, i) {
         piece.on('dragStop', function() {
-          var draggedPiece = this;
-          self._checkCollision(this.mergedPieces).forEach(function(fittingPiece, i) {
-            draggedPiece.mergeWith(fittingPiece);
+          this.mergedPieces.forEach(function(piece) {
+            self._checkCollision(piece).forEach(function(fittingPiece, i) {
+              piece.mergeWith(fittingPiece);
+            });
           });
         });
       });
     },
 
-    _checkCollision: function(pieces) {
+    _checkCollision: function(piece) {
       var self        = this;
-      return pieces.map(function(piece) {
-        return $.grep(self._pieces, function(otherPiece) {
-          return piece.isMatchingWith(otherPiece, self.config.mergeTolerance);
-        });
+      return $.grep(self._pieces, function(otherPiece) {
+        return piece.isMatchingWith(otherPiece, self.config.mergeTolerance);
       });
     },
 

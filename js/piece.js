@@ -221,15 +221,8 @@
     },
 
     mergeWith: function(otherPiece) {
-      otherPiece.alignWith(this);
       this.addMergedPiece(otherPiece);
-
-      // align all merged pieces as well
-      for (var i=0, l=this.mergedPieces.length-1; i<l; ++i) {
-        if (this.mergedPieces[i+1]) {
-          this.mergedPieces[i].alignWith(this.mergedPieces[i+1]);
-        }
-      }
+      otherPiece._alignPiecesWithThis(this.mergedPieces, otherPiece.mergedPieces);
     },
 
     addMergedPiece: function(otherPiece) {
@@ -242,8 +235,33 @@
       }
     },
 
+    /**
+      For every piece pf piecesToAlign do
+        if there is a matching partner in our merged Pieces
+          align this to his matching piece
+          add it to merged pieces
+        else remember for next duration
+      if there are pieces that didn't fit this round, recursion happens
+     */
+    _alignPiecesWithThis: function(piecesToAlign, mergedPieces) {
+      var piecesLeft = [];
+      piecesToAlign.forEach(function(piece) {
+        var wasAligned = _.find(mergedPieces, function(alignedPiece) {
+            return piece.alignWith(alignedPiece);
+          });
+        if (wasAligned) {
+          mergedPieces.push(piece);
+        } else {
+          piecesLeft.push(piece);
+        }
+      });
+      if (piecesLeft.length) {
+        this._alignPiecesWithThis(piecesLeft);
+      }
+    },
+
     alignWith: function(otherPiece) {
-      var p1     = this.position,
+      var p1     = otherPiece.position,
           width  = this.config.width,
           height = this.config.height,
           x = p1.x,
@@ -251,21 +269,22 @@
 
       switch(otherPiece) {
         case this._neighbors.top:
-          y -= height;
-          break;
-        case this._neighbors.right:
-          x += width;
-          break;
-        case this._neighbors.bottom:
           y += height;
           break;
-        case this._neighbors.left:
+        case this._neighbors.right:
           x -= width;
           break;
+        case this._neighbors.bottom:
+          y -= height;
+          break;
+        case this._neighbors.left:
+          x += width;
+          break;
         default:
-          return;
+          return false;
       }
-      otherPiece.setPosition(new Vector(Math.round(x), Math.round(y)));
+      this.setPosition(new Vector(Math.round(x), Math.round(y)));
+      return true;
     },
 
     // THIS ONLY WORKS WITH PIECES OF SAME SIZE (and WITHOUT ROTATED OBJECTS)

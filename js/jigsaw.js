@@ -19,7 +19,9 @@
         mergeTolerance: 20,
         pieceBorderColor: 'rgba(0,0,0,0.4)',
         dropShadow: false,
-        fitImageTo: window
+        fitImageTo: window,
+        onImageLoaded: function() {},
+        onComplete: function() {}
       }, config);
       this._pieces = [];
 
@@ -120,13 +122,21 @@
       var self = this;
       this._pieces.forEach(function(piece, i) {
         piece.on('dragStop', function() {
-          this.mergedPieces.forEach(function(piece) {
+          var draggedPiece = this;
+          draggedPiece.mergedPieces.forEach(function(piece) {
             self._checkCollision(piece).forEach(function(fittingPiece, i) {
               piece.mergeWith(fittingPiece);
             });
           });
+          self._checkCompleteness(draggedPiece);
         });
       });
+    },
+
+    _checkCompleteness: function(piece) {
+      if (this._pieces.length === piece.mergedPieces.length && this.config.onComplete) {
+        this.config.onComplete.call(this);
+      }
     },
 
     _checkCollision: function(piece) {
@@ -155,6 +165,10 @@
       }
       if (this.config.puzzleHeight === LIKE_IMAGE) {
         this.config.puzzleHeight = this._image.height;
+      }
+      // trigger onImageLoaded callback
+      if (this.config.onImageLoaded) {
+        this.config.onImageLoaded.call(this, this._image);
       }
       this._calculateScaling();
       this._createSVG();

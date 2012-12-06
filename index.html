@@ -23,10 +23,16 @@
 <body>
   <!--img src="http://www.get83.de/images/20120717222240_dsc02095-2 a.jpg" style="opacity: 0.5"-->
   <script>
-    new Jigsaw('http://static.nichtlustig.de/comics/full/121101.jpg', {
+    new Jigsaw('http://static.nichtlustig.de/comics/full/120202.jpg', {
       piecesX: 3,
       piecesY: 3,
-      pieceBorderColor: 'rgba(250,250,250,0.4)'
+      pieceBorderColor: 'rgba(250,250,250,0.4)',
+      onImageLoaded: function() {
+        console.log("image", arguments);
+      },
+      onComplete: function() {
+        console.log("completed", arguments);
+      }
     });
   </script>
 </body>

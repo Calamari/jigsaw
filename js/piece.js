@@ -164,13 +164,15 @@
     },
 
     _dropShadow: function(val) {
-      this.mergedPieces.forEach(function(p) {
-        if (val) {
-          p.element.setAttribute('filter', 'url(#dropShadow)');
-        } else {
+      if (val && this.config.dropShadow) {
+        this.mergedPieces.forEach(function(p) {
+          p.element.setAttribute('filter', 'url(#' + this.config.dropShadow + ')');
+        });
+      } else {
+        this.mergedPieces.forEach(function(p) {
           p.element.removeAttribute('filter');
-        }
-      });
+        });
+      }
     },
 
     _putToFront: function() {

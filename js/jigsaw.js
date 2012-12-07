@@ -92,6 +92,7 @@
             positionInImage: new Vector(pieceWidth * x, pieceHeight * y),
             pieceBorderColor: config.pieceBorderColor,
             scale: this.scale || 1,
+            dropShadow: config.dropShadow ? 'dropShadow' : false,
 
             right: x===lx-1 ? JigsawPiece.PLAIN : (Math.random() < 0.5 ? JigsawPiece.INSIDE : JigsawPiece.OUTSIDE),
             left: x===0 ? JigsawPiece.PLAIN : (this._pieces[pieceNumber-1-1].config.right === JigsawPiece.OUTSIDE ? JigsawPiece.INSIDE : JigsawPiece.OUTSIDE),

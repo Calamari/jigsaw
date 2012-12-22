@@ -28,6 +28,10 @@
       this._loadImage(imageUrl);
     },
 
+    remove: function() {
+      $(this.svg.element).remove();
+    },
+
     _loadImage: function(url) {
       var self = this,
           image = document.createElement('img');

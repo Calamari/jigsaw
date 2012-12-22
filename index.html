@@ -3,11 +3,31 @@
 <head>
   <title>Test</title>
   <style>
+    body * {
+      font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+      font-size: 14px;
+    }
     .puzzle-piece {
       position: absolute;
     }
     svg path {
       cursor: move;
+    }
+    #menu {
+      background: #ddd;
+      border-bottom: 1px solid #434;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 28px;
+      padding: 4px 10px;
+      z-index: 10000;
+    }
+
+    input[name=x],
+    input[name=y] {
+      text-align: center;
     }
   </style>
   <script src="lib/jquery-1.8.3.min.js"></script>
@@ -21,21 +41,43 @@
   <script src="js/piece.js"></script>
 </head>
 <body>
-  <!--img src="http://www.get83.de/images/20120717222240_dsc02095-2 a.jpg" style="opacity: 0.5"-->
+  <div id="menu">
+    <form method="GET" action="#" id="puzzleform">
+      File URL: <input name="url" type="text" placeholder="Choose image">
+      tiled up: <input name="x" type="text" value="5" size="1"> x <input name="y" type="text" value="5" size="1">
+      <button type="submit" id="puzzleit">Puzzle it!</button>
+    </form>
+  </div>
   <script>
-    new Jigsaw('http://static.nichtlustig.de/comics/full/120202.jpg', {
-      piecesX: 3,
-      piecesY: 3,
-      pieceBorderColor: 'rgba(250,250,250,0.4)',
-      onImageLoaded: function() {
-        console.log("image", arguments);
-      },
-      onImageError: function() {
-        console.log("image 404", arguments);
-      },
-      onComplete: function() {
-        console.log("completed", arguments);
-      }
+    (function(win) {
+      win.startJigsaw = function(url, x, y) {
+        if (win.jigsaw) {
+          win.jigsaw.remove();
+        }
+        win.jigsaw = new Jigsaw(url, {
+          piecesX: x,
+          piecesY: y,
+          pieceBorderColor: 'rgba(250,250,250,0.4)',
+          onImageLoaded: function() {
+            console.log("image", arguments);
+          },
+          onImageError: function() {
+            console.log("image 404", arguments);
+          },
+          onComplete: function() {
+            console.log("completed", arguments);
+          }
+        });
+      };
+    }(window));
+    $(function() {
+      startJigsaw('http://static.nichtlustig.de/comics/full/120202.jpg', 3, 3);
+
+      var form = $('#puzzleform');
+      form.on('submit', function(event) {
+        event.preventDefault();
+        startJigsaw(form.find('input[name=url]').val(), form.find('input[name=x]').val(), form.find('input[name=y]').val());
+      });
     });
   </script>
 </body>

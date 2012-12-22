@@ -3,6 +3,9 @@
 <head>
   <title>Test</title>
   <style>
+    body {
+      background: url(bg.jpg);
+    }
     body * {
       font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
       font-size: 14px;
@@ -14,7 +17,13 @@
       cursor: move;
     }
     #menu {
-      background: #ddd;
+      background: #fff; /* Old browsers */
+      background: -moz-linear-gradient(top, #f9f9f9 0%, #ffffff 100%); /* FF3.6+ */
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9f9f9), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(top, #f9f9f9 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(top, #f9f9f9 0%,#ffffff 100%); /* Opera 11.10+ */
+      background: -ms-linear-gradient(top, #f9f9f9 0%,#ffffff 100%); /* IE10+ */
+      background: linear-gradient(to bottom, #f9f9f9 0%,#ffffff 100%); /* W3C */
       border-bottom: 1px solid #434;
       position: absolute;
       top: 0;
@@ -23,6 +32,27 @@
       height: 28px;
       padding: 4px 10px;
       z-index: 10000;
+    }
+
+    header:before {
+    content: "";
+    border: 15px solid transparent;
+    border-top-color: #434;
+      width: 0;
+      height: 0;
+      position: absolute;
+      left: 20em;
+      bottom: -31px;
+    }
+    header:after {
+    content: "";
+    border: 15px solid transparent;
+    border-top-color: #fff;
+      width: 0;
+      height: 0;
+      position: absolute;
+      left: 20em;
+      bottom: -30px;
     }
 
     input[name=x],
@@ -41,13 +71,13 @@
   <script src="js/piece.js"></script>
 </head>
 <body>
-  <div id="menu">
+  <header id="menu">
     <form method="GET" action="#" id="puzzleform">
       File URL: <input name="url" type="text" placeholder="Choose image">
       tiled up: <input name="x" type="text" value="5" size="1"> x <input name="y" type="text" value="5" size="1">
       <button type="submit" id="puzzleit">Puzzle it!</button>
     </form>
-  </div>
+  </header>
   <script>
     (function(win) {
       win.startJigsaw = function(url, x, y) {
@@ -71,7 +101,7 @@
       };
     }(window));
     $(function() {
-      startJigsaw('http://static.nichtlustig.de/comics/full/120202.jpg', 3, 3);
+      startJigsaw('http://www.get83.de/images/20080625001233_fishernet hdr.jpg', 5, 4);
 
       var form = $('#puzzleform');
       form.on('submit', function(event) {

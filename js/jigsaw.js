@@ -111,15 +111,15 @@
 
     _setNeighbors: function() {
       var self    = this,
-          piecesX = this.config.piecesX,
-          piecesY = this.config.piecesY,
+          piecesX = ~~this.config.piecesX,
+          piecesY = ~~this.config.piecesY,
           x       = 0;
 
       this._pieces.forEach(function(piece, i) {
         piece.setNeighbors({
-          top: self._pieces[i - piecesX],
+          top: self._pieces[i - piecesX] || null,
           right: x < piecesX-1 ? self._pieces[i + 1] : null,
-          bottom: self._pieces[i + piecesX],
+          bottom: self._pieces[i + piecesX] || null,
           left: x > 0 ? self._pieces[i - 1] : null
         });
         x = ++x % piecesX;

@@ -245,14 +245,14 @@
         else remember for next duration
       if there are pieces that didn't fit this round, recursion happens
      */
-    _alignPiecesWithThis: function(piecesToAlign, mergedPieces) {
+    _alignPiecesWithThis: function(piecesToAlign, alignedPieces) {
       var piecesLeft = [];
       piecesToAlign.forEach(function(piece) {
-        var wasAligned = _.find(mergedPieces, function(alignedPiece) {
+        var wasAligned = _.find(alignedPieces, function(alignedPiece) {
             return piece.alignWith(alignedPiece);
           });
         if (wasAligned) {
-          mergedPieces.push(piece);
+          alignedPieces.push(piece);
         } else {
           piecesLeft.push(piece);
         }

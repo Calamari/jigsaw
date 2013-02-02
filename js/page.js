@@ -9,7 +9,7 @@
       pieceBorderColor: 'rgba(250,250,250,0.4)',
       mergeTolerance: 7,
       onImageLoaded: function() {
-        console.log("image", arguments);
+        //console.log("image", arguments);
       },
       onImageError: function() {
         $('.error-layer').addClass('open');
@@ -25,14 +25,25 @@ $(function() {
   var solvedLayer = $('.solved-layer'),
       errorLayer  = $('.error-layer'),
       hash        = location.hash.replace('#', ''),
-      params      = hash.split(';');
+      params      = hash.split(';'),
+      form        = $('#puzzleform'),
+      xField      = form.find('input[name=x]'),
+      yField      = form.find('input[name=y]');
+
   if (params.length === 3) {
     openPuzzle(params[0], params[1], params[2]);
   } else {
     openPuzzle('http://www.get83.de/images/20080625001233_fishernet hdr.jpg', 4, 4);
   }
 
+  function calcNumTiles(x, y) {
+    var numTiles = x * y;
+    $('#num-tiles').html(numTiles);
+  }
+
   function openPuzzle(url, x, y) {
+    calcNumTiles(x, y);
+
     startJigsaw(url, x, y);
     location.hash = '#' + url + ';' + x + ';' + y;
 
@@ -72,10 +83,9 @@ $(function() {
   });
 
 
-  var form = $('#puzzleform');
   form.on('submit', function(event) {
     event.preventDefault();
-    openPuzzle(form.find('input[name=url]').val(), form.find('input[name=x]').val(), form.find('input[name=y]').val());
+    openPuzzle(form.find('input[name=url]').val(), xField.val(), yField.val());
   });
 
   $('button.help').on('click', function() {
@@ -89,7 +99,7 @@ $(function() {
 
   $('#notfunny-button').on('click', function(event) {
     var picUrl = notFunnyUrl + notFunnys[Math.floor(Math.random()*notFunnys.length-1)];
-    openPuzzle(picUrl, form.find('input[name=x]').val(), form.find('input[name=y]').val());
+    openPuzzle(picUrl, xField.val(), yField.val());
     event.preventDefault();
   });
 

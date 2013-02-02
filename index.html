@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <link rel="shortcut icon" href="img/favicon.ico">
   <link rel="icon" type="image/png" href="img/favicon.png">
   <title>Solve this puzzle - Online Jigsaw Puzzle Generator</title>
@@ -13,15 +14,17 @@
   <header id="menu">
     <form method="GET" action="#" id="puzzleform">
       File URL: <input name="url" type="text" placeholder="Choose image" value="http://www.get83.de/images/20080625001233_fishernet hdr.jpg">
-      tiles: <input name="x" type="text" value="4" size="1"> x <input name="y" type="text" value="4" size="1">
+      tiles: <input name="x" type="text" value="8" size="1"> x <input name="y" type="text" value="8" size="1">
       <button type="submit" id="puzzleit">Puzzle it!</button>
+      (<span id="num-tiles"></span> tiles)
 
       <!--or <button id="notfunny-button">puzzle a random nicht-lustig.de comic: Get a nicht-lustig.</button><sup><a href="http://www.nicht-lustig.de" target="_blank">[1]</a></sup>-->
     </form>
 
     <button class="help">What is this ?</button>
     <div class="help">
-      <p>This is a jigsaw puzzle generator, where you can either choose an image via url and puzzle it, or puzzle a random nicht-lustig comic.</p>
+      <p>This is a jigsaw puzzle generator, where you can either choose an image via url and puzzle it.<!--, or puzzle a random nicht-lustig comic.--></p>
+      <p>You can also save the url in the address bar of your browser and puzzle it later. Or send it to a friend.</p>
 
       <h4>Share the puzzle you are currently solving to your friends:</h4>
       <div class="share-row">
@@ -70,6 +73,6 @@
   <script src="js/piece.js"></script>
   <script src="notfunnys.js"></script>
   <script src="js/page.js"></script-->
-  <script src="/js/application.min.js"></script>
+  <script src="/js/application.min.js" async></script>
 </body>
 </html>

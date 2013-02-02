@@ -4,9 +4,9 @@
   <link rel="shortcut icon" href="img/favicon.ico">
   <link rel="icon" type="image/png" href="img/favicon.png">
   <title>Test</title>
-  <meta property="og:title" content="Jigsaw on jaz-lounge.com - by Georg Tavonius">
-  <meta property="og:description" content="Puzzle something from time to time. It's kind of a Zen thing.">
-  <meta property="og:image" content="TODO">
+  <meta property="og:title" content="Solve this puzzle - in Online Jigsaw Puzzle Generator">
+  <meta property="og:description" content="Puzzle something from time to time. It's kind of a Zen thing. By Georg Tavonius">
+  <meta property="og:image" content="img/favicon.png">
   <style>
     body {
       background: url(bg.jpg);
@@ -72,7 +72,7 @@
       top: 4px;
     }
 
-    .solved-layer,
+    .layer,
     div.help {
       display: none;
       background: #fff;
@@ -105,7 +105,8 @@
       right: 40px;
       top: -22px;
     }
-    .solved-layer {
+
+    .layer {
       display: block;
       top: 40%;
       right: -400px;
@@ -113,14 +114,14 @@
       z-index: 1000;
       -webkit-transition: right 0.6s ease-in-out;
     }
-    .solved-layer h4 {
+    .layer h4 {
       font-size: 1.2em;
       margin-top: 0px;
     }
-    .solved-layer.open {
+    .layer.open {
       right: 0px;
     }
-    .solved-layer .closer {
+    .layer .closer {
       position: absolute;
       top: 3px;
       right: 3px;
@@ -192,7 +193,7 @@
       </div>
     </div>
   </header>
-  <div class="solved-layer">
+  <div class="solved-layer layer">
     <span class="closer">X</span>
     <h4>Gratulations, you solved this one.</h4>
     <p><strong>Did you have fun?</strong> Let your friends solve this puzzle, too:</p>
@@ -202,6 +203,11 @@
       <a href="" class="share-icon share-gplus" target="_blank">on Google+</a>
     </div>
     or donate a beer or flattr
+  </div>
+  <div class="error-layer layer">
+    <span class="closer">X</span>
+    <h4>Sorry, that image could not be loaded.</h4>
+    <p>But you can try another image.</p>
   </div>
   <script type="text/javascript" src="notfunnys.js"></script>
   <script>
@@ -218,10 +224,9 @@
             console.log("image", arguments);
           },
           onImageError: function() {
-            console.log("image 404", arguments);
+            $('.error-layer').addClass('open');
           },
           onComplete: function() {
-            console.log("completed", arguments);
             $('.solved-layer').addClass('open');
           }
         });
@@ -230,6 +235,7 @@
 
     $(function() {
       var solvedLayer = $('.solved-layer'),
+          errorLayer  = $('.error-layer'),
           hash        = location.hash.replace('#', ''),
           params      = hash.split(';');
       if (params.length === 3) {
@@ -243,22 +249,38 @@
         location.hash = '#' + url + ';' + x + ';' + y;
 
         solvedLayer.removeClass('open');
+        errorLayer.removeClass('open');
 
         var text = encodeURIComponent('Take time and puzzle with jaz-lounge.com jigsaw. It\'s kind of a Zen thing.'),
             shareUrl = encodeURIComponent(location);
         $('.share-fb').prop('href', 'http://www.facebook.com/sharer.php?u=' + shareUrl + '&p[title]=TITLE&p[url]=URL&p[summary]=' + text);
 
-        $('.share-twitter').prop('href', 'https://twitter.com/intent/tweet?url=' + shareUrl + '&text=' + text);
+        $('.share-twitter').prop('href', 'https://twitter.com/share?text=' + text + '&url=' + shareUrl + '&hashtags=' + encodeURIComponent('jigsaw,jazlounge'));
 
         $('.share-gplus').prop('href', 'https://plus.google.com/share?url=' + shareUrl);
+
+        // bit.ly shortening
+        $.getJSON('https://api-ssl.bitly.com/v3/user/link_save', {
+          access_token: '113326fee77b51f016bfa70ec78dde7140c03141',
+          longUrl: location.href
+        }).success(function(data) {
+          if (data && data.data && data.data.link_save && data.data.link_save.link) {
+            var shortenedUrl = data.data.link_save.link;
+
+            $('.share-twitter').prop('href', 'https://twitter.com/share?text=' + text + '&url=' + shortenedUrl + '&hashtags=' + encodeURIComponent('jigsaw,jazlounge'));
+
+            $('.share-gplus').prop('href', 'https://plus.google.com/share?url=' + shortenedUrl);
+          }
+        });
       }
 
       function openShareWindow(url) {
         window.open(url, 'share-jigsaw', 'status=0,location=0,toolbar=0,width=575,height=400');
       }
 
-      solvedLayer.on('click', '.closer', function() {
-        solvedLayer.removeClass('open');
+      $('.layer').on('click', '.closer', function(event) {
+        var layer = $(event.target).closest('.layer');
+        layer.removeClass('open');
       });
 
 
@@ -283,8 +305,24 @@
         event.preventDefault();
       });
 
-      $('.share-fb, .share-twitter, .share-gplus').on('click', function(event) {
+      $('.share-fb, .share-gplus').on('click', function(event) {
         openShareWindow(this.href)
+        event.preventDefault();
+      });
+
+      $('.share-twitter').on('click', function(event) {
+        var href = this.href;
+        // $.get('https://api-ssl.bitly.com/v3/user/link_save', {
+        //   access_token: '113326fee77b51f016bfa70ec78dde7140c03141',
+        //   longUrl: href
+        // }).success(function(data) {
+        //   if (data && data.link_save && data.link_save.link) {
+        //     openShareWindow(data.link_save.link)
+        //   } else {
+        //     openShareWindow(href);
+        //   }
+        // });
+            openShareWindow(href);
         event.preventDefault();
       });
     });

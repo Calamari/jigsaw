@@ -223,42 +223,41 @@
     },
 
     mergeWith: function(otherPiece) {
-      this.addMergedPiece(otherPiece);
-      otherPiece._alignPiecesWithThis(this.mergedPieces, otherPiece.mergedPieces);
+      this._addMergedPieces(otherPiece);
+      otherPiece._alignPiecesWithThis(this.mergedPieces, [otherPiece]);
+      this._putToFront();
     },
 
-    addMergedPiece: function(otherPiece) {
+    _addMergedPieces: function(otherPiece) {
       var self = this;
-      if (_.indexOf(this.mergedPieces, otherPiece) === -1) {
-        this.mergedPieces = _.uniq($.merge(this.mergedPieces, otherPiece.mergedPieces));
-        this.mergedPieces.forEach(function(p) {
-          p.addMergedPiece(self);
-        });
-      }
+      this.mergedPieces = _.uniq($.merge(this.mergedPieces, otherPiece.mergedPieces));
+      this.mergedPieces.forEach(function(p) {
+        p.mergedPieces = self.mergedPieces;
+      });
     },
 
     /**
-      For every piece pf piecesToAlign do
-        if there is a matching partner in our merged Pieces
+      For every piece of piecesToAlign do
+        if there is a matching partner in our already aligned pieces
           align this to his matching piece
-          add it to merged pieces
-        else remember for next duration
+          add it to aligned pieces
+        else remember as todo for next duration
       if there are pieces that didn't fit this round, recursion happens
      */
-    _alignPiecesWithThis: function(piecesToAlign, mergedPieces) {
+    _alignPiecesWithThis: function(piecesToAlign, alignedPieces) {
       var piecesLeft = [];
       piecesToAlign.forEach(function(piece) {
-        var wasAligned = _.find(mergedPieces, function(alignedPiece) {
-            return piece.alignWith(alignedPiece);
-          });
+        var wasAligned = _.find(alignedPieces, function(alignedPiece) {
+          return piece.alignWith(alignedPiece);
+        });
         if (wasAligned) {
-          mergedPieces.push(piece);
+          alignedPieces.push(piece);
         } else {
           piecesLeft.push(piece);
         }
       });
       if (piecesLeft.length) {
-        this._alignPiecesWithThis(piecesLeft);
+        this._alignPiecesWithThis(piecesLeft, alignedPieces);
       }
     },
 

@@ -225,6 +225,7 @@
     mergeWith: function(otherPiece) {
       this._addMergedPieces(otherPiece);
       otherPiece._alignPiecesWithThis(this.mergedPieces, [otherPiece]);
+      this._putToFront();
     },
 
     _addMergedPieces: function(otherPiece) {

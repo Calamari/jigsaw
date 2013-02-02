@@ -29,7 +29,9 @@
     },
 
     remove: function() {
-      $(this.svg.element).remove();
+      if (this.svg) {
+        $(this.svg.element).remove();
+      }
     },
 
     _loadImage: function(url) {

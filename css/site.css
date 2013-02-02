@@ -1,0 +1,174 @@
+body {
+  background: url(/img/bg.jpg);
+  overflow: hidden;
+  width: 100%;
+}
+body * {
+  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+  font-size: 14px;
+}
+
+a {
+  color: #666;
+  font-size: 0.9;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.puzzle-piece {
+  position: absolute;
+}
+svg path {
+  cursor: move;
+}
+#menu {
+  background: #2f2726; /* Old browsers */
+  background: -moz-linear-gradient(top, #f9f9f9 0%, #ffffff 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9f9f9), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #f9f9f9 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #f9f9f9 0%,#ffffff 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #f9f9f9 0%,#ffffff 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #f9f9f9 0%,#ffffff 100%); /* W3C */
+  border-bottom: 1px solid #434;
+  color: #605050;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  padding: 4px 10px;
+  z-index: 10000;
+}
+
+header:before {
+  content: "";
+  border: 15px solid transparent;
+  border-top-color: #434;
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 20em;
+  bottom: -31px;
+}
+header:after {
+  content: "";
+  border: 15px solid transparent;
+  border-top-color: #fff;
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 20em;
+  bottom: -30px;
+}
+
+input[name=x],
+input[name=y] {
+  text-align: center;
+}
+
+button.help {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}
+
+.layer,
+div.help {
+  display: none;
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 4px;
+  position: absolute;
+  padding: 4px 10px;
+  right: 4px;
+  top: 35px;
+  width: 300px;
+  box-shadow: 0px 0px 4px rgba(0,0,0,0.4);
+}
+div.help:before {
+  content: "";
+  border: 11px solid transparent;
+  border-bottom-color: #434;
+  width: 0;
+  height: 0;
+  position: absolute;
+  right: 40px;
+  top: -23px;
+}
+div.help:after {
+  content: "";
+  border: 11px solid transparent;
+  border-bottom-color: #fff;
+  width: 0;
+  height: 0;
+  position: absolute;
+  right: 40px;
+  top: -22px;
+}
+
+.layer {
+  display: block;
+  top: 40%;
+  right: -400px;
+  opacity: 0;
+  padding: 20px;
+  z-index: 1000;
+  -webkit-transition: right 0.6s ease-in-out, opacity 0.6s ease-in-out;
+}
+.layer h4 {
+  font-size: 1.2em;
+  margin-top: 0px;
+}
+.layer.open {
+  opacity: 1;
+  right: 0px;
+}
+.layer .closer {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  color: #999;
+  cursor: pointer;
+}
+
+.share-row {
+  overflow: hidden;
+  height: 55px;
+}
+.share-icon {
+  background: url(/img/share-icons50.png) no-repeat 0 0;
+  display: inline-block;
+  overflow: hidden;
+  width: 55px;
+  height: 55px;
+  text-indent: -9999px;
+  margin-right: 5px;
+  -webkit-transform: translateY(15px) rotate(-13deg);
+  -webkit-transition-duration: 0.6s;
+}
+.share-icon.share-gplus {
+  background-position: 0 0;
+}
+.share-icon.share-fb {
+  background-position: -55px 0;
+}
+.share-icon.share-twitter {
+  background-position: -110px 0;
+}
+.share-icon.share-paypal {
+  background-position: -165px 0;
+}
+.share-icon.share-flattr {
+  background-position: -220px 0;
+}
+.share-icon:hover {
+  -webkit-transform: translateY(0);
+}
+
+.copyright {
+  color: #555;
+  font-size: 0.9em;
+}
+.copyright a {
+  font-size: 1em;
+}

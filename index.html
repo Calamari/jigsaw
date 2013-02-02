@@ -3,182 +3,20 @@
 <head>
   <link rel="shortcut icon" href="img/favicon.ico">
   <link rel="icon" type="image/png" href="img/favicon.png">
-  <title>Test</title>
-  <meta property="og:title" content="Solve this puzzle - in Online Jigsaw Puzzle Generator">
-  <meta property="og:description" content="Puzzle something from time to time. It's kind of a Zen thing. By Georg Tavonius">
+  <title>Solve this puzzle - Online Jigsaw Puzzle Generator</title>
+  <meta property="og:title" content="Solve this puzzle - Online Jigsaw Puzzle Generator">
+  <meta property="og:description" content="An online puzzle generator. Puzzle your favorite images. By Georg Tavonius">
   <meta property="og:image" content="img/favicon.png">
-  <style>
-    body {
-      background: url(bg.jpg);
-    }
-    body * {
-      font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
-      font-size: 14px;
-    }
-    .puzzle-piece {
-      position: absolute;
-    }
-    svg path {
-      cursor: move;
-    }
-    #menu {
-      background: #2f2726; /* Old browsers */
-      background: -moz-linear-gradient(top, #f9f9f9 0%, #ffffff 100%); /* FF3.6+ */
-      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9f9f9), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
-      background: -webkit-linear-gradient(top, #f9f9f9 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
-      background: -o-linear-gradient(top, #f9f9f9 0%,#ffffff 100%); /* Opera 11.10+ */
-      background: -ms-linear-gradient(top, #f9f9f9 0%,#ffffff 100%); /* IE10+ */
-      background: linear-gradient(to bottom, #f9f9f9 0%,#ffffff 100%); /* W3C */
-      border-bottom: 1px solid #434;
-      color: #605050;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 28px;
-      padding: 4px 10px;
-      z-index: 10000;
-    }
-
-    header:before {
-      content: "";
-      border: 15px solid transparent;
-      border-top-color: #434;
-      width: 0;
-      height: 0;
-      position: absolute;
-      left: 20em;
-      bottom: -31px;
-    }
-    header:after {
-      content: "";
-      border: 15px solid transparent;
-      border-top-color: #fff;
-      width: 0;
-      height: 0;
-      position: absolute;
-      left: 20em;
-      bottom: -30px;
-    }
-
-    input[name=x],
-    input[name=y] {
-      text-align: center;
-    }
-
-    button.help {
-      position: absolute;
-      right: 4px;
-      top: 4px;
-    }
-
-    .layer,
-    div.help {
-      display: none;
-      background: #fff;
-      border: 1px solid #999;
-      border-radius: 4px;
-      position: absolute;
-      padding: 4px 10px;
-      right: 4px;
-      top: 35px;
-      width: 300px;
-      box-shadow: 0px 0px 4px rgba(0,0,0,0.4);
-    }
-    div.help:before {
-      content: "";
-      border: 11px solid transparent;
-      border-bottom-color: #434;
-      width: 0;
-      height: 0;
-      position: absolute;
-      right: 40px;
-      top: -23px;
-    }
-    div.help:after {
-      content: "";
-      border: 11px solid transparent;
-      border-bottom-color: #fff;
-      width: 0;
-      height: 0;
-      position: absolute;
-      right: 40px;
-      top: -22px;
-    }
-
-    .layer {
-      display: block;
-      top: 40%;
-      right: -400px;
-      padding: 20px;
-      z-index: 1000;
-      -webkit-transition: right 0.6s ease-in-out;
-    }
-    .layer h4 {
-      font-size: 1.2em;
-      margin-top: 0px;
-    }
-    .layer.open {
-      right: 0px;
-    }
-    .layer .closer {
-      position: absolute;
-      top: 3px;
-      right: 3px;
-      color: #999;
-      cursor: pointer;
-    }
-
-    .share-row {
-      overflow: hidden;
-      height: 55px;
-    }
-    .share-icon {
-      background: url(img/share-icons50.png) no-repeat 0 0;
-      display: inline-block;
-      overflow: hidden;
-      width: 55px;
-      height: 55px;
-      text-indent: -9999px;
-      margin-right: 5px;
-      -webkit-transform: translateY(15px) rotate(-13deg);
-      -webkit-transition-duration: 0.6s;
-    }
-    .share-icon.share-gplus {
-      background-position: 0 0;
-    }
-    .share-icon.share-fb {
-      background-position: -55px 0;
-    }
-    .share-icon.share-twitter {
-      background-position: -110px 0;
-    }
-    .share-icon.share-paypal {
-      background-position: -165px 0;
-    }
-    .share-icon:hover {
-      -webkit-transform: translateY(0);
-    }
-
-  </style>
-  <script src="lib/jquery-1.8.3.min.js"></script>
-  <script src="lib/underscore-1.4.2.js"></script>
-  <script src="lib/base.js"></script>
-  <script src="lib/vector.js"></script>
-  <script src="lib/array.for_each.js"></script>
-  <script src="lib/array.map.js"></script>
-  <script src="js/svg.js"></script>
-  <script src="js/jigsaw.js"></script>
-  <script src="js/piece.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/site.css">
 </head>
 <body>
   <header id="menu">
     <form method="GET" action="#" id="puzzleform">
       File URL: <input name="url" type="text" placeholder="Choose image" value="http://www.get83.de/images/20080625001233_fishernet hdr.jpg">
-      tiled up: <input name="x" type="text" value="4" size="1"> x <input name="y" type="text" value="4" size="1">
+      tiles: <input name="x" type="text" value="4" size="1"> x <input name="y" type="text" value="4" size="1">
       <button type="submit" id="puzzleit">Puzzle it!</button>
 
-      or <button id="notfunny-button">puzzle a random nicht-lustig.de comic: Get a nicht-lustig.</button><sup><a href="http://www.nicht-lustig.de" target="_blank">[1]</a></sup>
+      <!--or <button id="notfunny-button">puzzle a random nicht-lustig.de comic: Get a nicht-lustig.</button><sup><a href="http://www.nicht-lustig.de" target="_blank">[1]</a></sup>-->
     </form>
 
     <button class="help">What is this ?</button>
@@ -190,7 +28,17 @@
         <a href="" class="share-icon share-fb" target="_blank">Share on Facebook</a>
         <a href="" class="share-icon share-twitter" target="_blank">Share on Twitter</a>
         <a href="" class="share-icon share-gplus" target="_blank">Share on Google+</a>
+
+        <a href="https://flattr.com/submit/auto?user_id=Georg_Tavonius&amp;url=http://jigsawtest.tovoodo.com&amp;title=Jigsaw on jaz-lounge.com&amp;description=An online puzzle generator. Puzzle your favorite images.&amp;language=en&amp;tags=game,jigsaw,puzzle,generator,jaz-lounge&amp;category=rest" class="share-icon share-flattr" target="_blank">Flattr this</a>
       </div>
+
+      <a class="FlattrButton" style="display:none;"
+        title="An online puzzle generator. Puzzle your favorite images."
+        data-flattr-tags="game,jigsaw,puzzle,generator,jaz-lounge"
+        href="http://jigsaw.tovoodo.com">
+        Flattr this
+      </a>
+      <p class="copyright">Developed by <a href="http://jaz-lounge.com">Georg Tavonius</a>.</p>
     </div>
   </header>
   <div class="solved-layer layer">
@@ -201,6 +49,8 @@
       <a href="" class="share-icon share-fb" target="_blank">on Facebook</a>
       <a href="" class="share-icon share-twitter" target="_blank">on Twitter</a>
       <a href="" class="share-icon share-gplus" target="_blank">on Google+</a>
+
+      <a href="https://flattr.com/submit/auto?user_id=Georg_Tavonius&amp;url=http://jigsawtest.tovoodo.com&amp;title=Jigsaw on jaz-lounge.com&amp;description=An online puzzle generator. Puzzle your favorite images.&amp;language=en&amp;tags=game,jigsaw,puzzle,generator,jaz-lounge&amp;category=rest" class="share-icon share-flattr" target="_blank">Flattr this</a>
     </div>
     or donate a beer or flattr
   </div>
@@ -209,123 +59,16 @@
     <h4>Sorry, that image could not be loaded.</h4>
     <p>But you can try another image.</p>
   </div>
-  <script type="text/javascript" src="notfunnys.js"></script>
-  <script>
-    (function(win) {
-      win.startJigsaw = function(url, x, y) {
-        if (win.jigsaw) {
-          win.jigsaw.remove();
-        }
-        win.jigsaw = new Jigsaw(url, {
-          piecesX: x,
-          piecesY: y,
-          pieceBorderColor: 'rgba(250,250,250,0.4)',
-          onImageLoaded: function() {
-            console.log("image", arguments);
-          },
-          onImageError: function() {
-            $('.error-layer').addClass('open');
-          },
-          onComplete: function() {
-            $('.solved-layer').addClass('open');
-          }
-        });
-      };
-    }(window));
-
-    $(function() {
-      var solvedLayer = $('.solved-layer'),
-          errorLayer  = $('.error-layer'),
-          hash        = location.hash.replace('#', ''),
-          params      = hash.split(';');
-      if (params.length === 3) {
-        openPuzzle(params[0], params[1], params[2]);
-      } else {
-        openPuzzle('http://www.get83.de/images/20080625001233_fishernet hdr.jpg', 4, 4);
-      }
-
-      function openPuzzle(url, x, y) {
-        startJigsaw(url, x, y);
-        location.hash = '#' + url + ';' + x + ';' + y;
-
-        solvedLayer.removeClass('open');
-        errorLayer.removeClass('open');
-
-        var text = encodeURIComponent('Take time and puzzle with jaz-lounge.com jigsaw. It\'s kind of a Zen thing.'),
-            shareUrl = encodeURIComponent(location);
-        $('.share-fb').prop('href', 'http://www.facebook.com/sharer.php?u=' + shareUrl + '&p[title]=TITLE&p[url]=URL&p[summary]=' + text);
-
-        $('.share-twitter').prop('href', 'https://twitter.com/share?text=' + text + '&url=' + shareUrl + '&hashtags=' + encodeURIComponent('jigsaw,jazlounge'));
-
-        $('.share-gplus').prop('href', 'https://plus.google.com/share?url=' + shareUrl);
-
-        // bit.ly shortening
-        $.getJSON('https://api-ssl.bitly.com/v3/user/link_save', {
-          access_token: '113326fee77b51f016bfa70ec78dde7140c03141',
-          longUrl: location.href
-        }).success(function(data) {
-          if (data && data.data && data.data.link_save && data.data.link_save.link) {
-            var shortenedUrl = data.data.link_save.link;
-
-            $('.share-twitter').prop('href', 'https://twitter.com/share?text=' + text + '&url=' + shortenedUrl + '&hashtags=' + encodeURIComponent('jigsaw,jazlounge'));
-
-            $('.share-gplus').prop('href', 'https://plus.google.com/share?url=' + shortenedUrl);
-          }
-        });
-      }
-
-      function openShareWindow(url) {
-        window.open(url, 'share-jigsaw', 'status=0,location=0,toolbar=0,width=575,height=400');
-      }
-
-      $('.layer').on('click', '.closer', function(event) {
-        var layer = $(event.target).closest('.layer');
-        layer.removeClass('open');
-      });
-
-
-      var form = $('#puzzleform');
-      form.on('submit', function(event) {
-        event.preventDefault();
-        openPuzzle(form.find('input[name=url]').val(), form.find('input[name=x]').val(), form.find('input[name=y]').val());
-      });
-
-      $('button.help').on('click', function() {
-        $('div.help').toggle();
-      });
-      $('body').on('click', function(event) {
-        if (!$(event.target).closest('.help').length) {
-          $('div.help').hide();
-        }
-      });
-
-      $('#notfunny-button').on('click', function(event) {
-        var picUrl = notFunnyUrl + notFunnys[Math.floor(Math.random()*notFunnys.length-1)];
-        openPuzzle(picUrl, form.find('input[name=x]').val(), form.find('input[name=y]').val());
-        event.preventDefault();
-      });
-
-      $('.share-fb, .share-gplus').on('click', function(event) {
-        openShareWindow(this.href)
-        event.preventDefault();
-      });
-
-      $('.share-twitter').on('click', function(event) {
-        var href = this.href;
-        // $.get('https://api-ssl.bitly.com/v3/user/link_save', {
-        //   access_token: '113326fee77b51f016bfa70ec78dde7140c03141',
-        //   longUrl: href
-        // }).success(function(data) {
-        //   if (data && data.link_save && data.link_save.link) {
-        //     openShareWindow(data.link_save.link)
-        //   } else {
-        //     openShareWindow(href);
-        //   }
-        // });
-            openShareWindow(href);
-        event.preventDefault();
-      });
-    });
-  </script>
+  <script src="lib/jquery-1.8.3.min.js"></script>
+  <script src="lib/underscore-1.4.2.js"></script>
+  <script src="lib/base.js"></script>
+  <script src="lib/vector.js"></script>
+  <script src="lib/array.for_each.js"></script>
+  <script src="lib/array.map.js"></script>
+  <script src="js/svg.js"></script>
+  <script src="js/jigsaw.js"></script>
+  <script src="js/piece.js"></script>
+  <script src="notfunnys.js"></script>
+  <script src="js/page.js"></script>
 </body>
 </html>

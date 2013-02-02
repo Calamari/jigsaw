@@ -223,18 +223,16 @@
     },
 
     mergeWith: function(otherPiece) {
-      this.addMergedPiece(otherPiece);
+      this._addMergedPieces(otherPiece);
       otherPiece._alignPiecesWithThis(this.mergedPieces, otherPiece.mergedPieces);
     },
 
-    addMergedPiece: function(otherPiece) {
+    _addMergedPieces: function(otherPiece) {
       var self = this;
-      if (_.indexOf(this.mergedPieces, otherPiece) === -1) {
-        this.mergedPieces = _.uniq($.merge(this.mergedPieces, otherPiece.mergedPieces));
-        this.mergedPieces.forEach(function(p) {
-          p.addMergedPiece(self);
-        });
-      }
+      this.mergedPieces = _.uniq($.merge(this.mergedPieces, otherPiece.mergedPieces));
+      this.mergedPieces.forEach(function(p) {
+        p.mergedPieces = self.mergedPieces;
+      });
     },
 
     /**
@@ -251,9 +249,7 @@
         var wasAligned = _.find(alignedPieces, function(alignedPiece) {
             return piece.alignWith(alignedPiece);
           });
-        if (wasAligned) {
-          alignedPieces.push(piece);
-        } else {
+        if (!wasAligned) {
           piecesLeft.push(piece);
         }
       });

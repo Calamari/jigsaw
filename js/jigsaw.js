@@ -53,8 +53,9 @@
             height: window.innerHeight,
             width: window.innerWidth
           }),
-          defs = svg.defs();
-      $(svg.element)
+          defs = svg.defs(),
+          element = svg.element;
+      $(element)
         .css({
           position: 'absolute',
           left: 0,
@@ -80,6 +81,12 @@
       if (config.dropShadow) {
         this._createShadow();
       }
+      $(window).on('resize', function() {
+        $(element).css({
+          width: window.innerWidth,
+          height: window.innerHeight
+        });
+      });
     },
 
     _createPieces: function() {

@@ -151,8 +151,9 @@
     },
 
     _checkCompleteness: function(piece) {
-      if (this._pieces.length === piece.mergedPieces.length && this.config.onComplete) {
+      if (!this._alreadyCompleted && this._pieces.length === piece.mergedPieces.length && this.config.onComplete) {
         this.config.onComplete.call(this);
+        this._alreadyCompleted = true;
       }
     },
 
